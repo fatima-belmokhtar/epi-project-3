@@ -19,10 +19,12 @@ library(forcats)
 You can add options to executable code like this
 
 ```{r}
-setwd("/Users/shaniabaffour/Desktop/Master /3. Semester/Projekt")
+setwd("/Users/mercedesadedara/Documents/Uni Dateien/Master Epi/3 Semester/Projekt")
 
 pne <- read_excel("Rohdatensatz 27.10 (grundauszählung).xlsx")
 ```
+
+### Grundauszählung: Diagnose
 
 ```{r}
 sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADS]` == "Ja", na.rm = TRUE)
@@ -58,4 +60,29 @@ sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankun
 
 ```{r}
 sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Ich habe keine der oben genannten Diagnosen]` == "Ja", na.rm = TRUE)
+```
+
+### Zeilen löschen
+
+```{r}
+pne <- pne[-c(208,209,2010,2011,2012,2013,2014,2015,2016,2017,218), ]   # löscht Zeile 208 bis 218, hat nicht alles gelöscht also nochmal einzelne löschen
+
+```
+
+```{r}
+pne <- pne[-c(208,209,2010,2011), ] #hat wieder nicht alle gelöscht
+```
+
+```{r}
+pne <- pne[-c(208,209), ]
+```
+
+### Variablen umbenennen
+
+```{r}
+names(df)
+```
+
+```{r}
+
 ```
