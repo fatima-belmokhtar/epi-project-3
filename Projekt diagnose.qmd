@@ -1,0 +1,61 @@
+---
+title: "pne_Analyse (27.10.2025)"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(dplyr)
+library(labelled)
+library(readr)
+library(stringr)
+library(tidyr)
+library(purrr)
+library(forcats)
+```
+
+You can add options to executable code like this
+
+```{r}
+setwd("/Users/shaniabaffour/Desktop/Master /3. Semester/Projekt")
+
+pne <- read_excel("Rohdatensatz 27.10 (grundauszählung).xlsx")
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADS]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Autismus]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Depression ]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Angststörungen ]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schizophrenie]`  == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Migräne ]`  == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schlafstörung (Insomnie)]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Ich habe keine der oben genannten Diagnosen]` == "Ja", na.rm = TRUE)
+```
