@@ -641,11 +641,28 @@ pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung e
 table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]"]], useNA = "ifany")
 ```
 
+### Modafinil (Vigil)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]], useNA = "ifany")
+```
+
 #### Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)
 
 ```{r}
 # Spalte umkodieren (ja = 1, nein = 0)
-pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]"]] <-
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]"]] <-
   ifelse(
     tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]"]])) == "ja", 1,
     ifelse(
@@ -656,6 +673,56 @@ pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung e
 
 # Kontrolle
 table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]"]], useNA = "ifany")
+
 ```
 
-#### Modafinil (Vigil)
+#### Pflanzliche Antidepressiva (Johanniskraut)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]], useNA = "ifany")
+```
+
+### Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]], useNA = "ifany")
+```
+
+### Cannabis
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]], useNA = "ifany")
+```
