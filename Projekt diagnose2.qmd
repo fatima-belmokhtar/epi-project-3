@@ -1246,3 +1246,7 @@ table(pne[["Konnte der gewünschte Effekt erzielt werden?"]], useNA = "ifany")
 ```
 
 ### Stresssoren
+
+```{r}
+
+```
