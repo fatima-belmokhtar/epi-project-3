@@ -15,15 +15,25 @@ library(tidyr)
 library(purrr)
 library(forcats)
 library(readxl)
+library(here)
 ```
 
 You can add options to executable code like this
 
 ```{r}
-setwd("/Users/shaniabaffour/Desktop/Master /3. Semester/Projekt")
+setwd("/Users/mercedesadedara/Documents/Uni Dateien/Master Epi/3 Semester/Projekt")
 
 pne <- read_excel("Rohdatensatz 27.10 (grundauszählung).xlsx")
 ```
+
+## Zeilen löschen 
+
+```{r}
+pne <- pne[-c(208:218), ]   # löscht Zeile 208 bis 2018, die waren leer
+
+```
+
+### Auszählung (Diagnose)
 
 ```{r}
 sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADS]` == "Ja", na.rm = TRUE)
@@ -1799,4 +1809,338 @@ pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [genderfluid]"]] <-
 
 # Kontrolle
 table(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [genderfluid]"]], useNA = "ifany")
+```
+
+### Bundesland
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `In welchem Bundesland bist du an einer Hochschule immatrikuliert?` =
+      recode(
+        `In welchem Bundesland bist du an einer Hochschule immatrikuliert?`,
+        "Bremen" = 1L,
+        "Niedersachsen" = 2L,
+        "Hamburg" = 3L,
+        "Hessen" = 4L,
+        "Nordrhein-Westfalen" = 5L,
+        "Bayern" = 6L,
+        "Schleswig-Holstein" = 7L,
+        "Baden-Württemberg" = 8L,
+        "Berlin" = 9L,
+        "Sachsen" = 10L,
+        "Rheinland-Pfalz" = 11L
+      )
+  )
+table(pne[["In welchem Bundesland bist du an einer Hochschule immatrikuliert?"]], useNA = "ifany")
+```
+
+### Abschlussziel
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welches Abschlussziel strebst du derzeit an? ` =
+      recode(
+        `Welches Abschlussziel strebst du derzeit an? `,
+        "Bachelor" = 1L,
+        "Master" = 2L,
+        "Duales Bachelor-Studium" = 3L,
+        "Staatsexamen" = 4L
+      )
+  )
+table(pne[["Welches Abschlussziel strebst du derzeit an? "]], useNA = "ifany")
+```
+
+### Abschlussziel Sonstiges Feld löschen (funktioniert iwie nicht)
+
+```{r}
+pne <- pne %>% 
+  select(-`Welches Abschlussziel strebst du derzeit an?  [Sonstiges]`)
+```
+
+### Häufigkeit (Konsum Studienbeginn)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Wie häufig hast du seit Beginn deines Studiums Substanzen eingenommen, um besser mit den Anforderungen des Studiums zurechtzukommen (z. B. Mittel zur Stressbewältigung oder Leistungssteigerung)? ` = recode(
+      `Wie häufig hast du seit Beginn deines Studiums Substanzen eingenommen, um besser mit den Anforderungen des Studiums zurechtzukommen (z. B. Mittel zur Stressbewältigung oder Leistungssteigerung)? `,
+      "Ich habe solche Substanzen nur ganz selten eingenommen." = 1,
+      "Ich nehme solche Substanzen ab und zu ein." = 2,
+      "Ich nehme solche Substanzen häufig ein." = 3
+    )
+  )
+```
+
+# Häufigkeit (Art)
+
+### Ginkgo Biloba
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Ginkgo Biloba]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Ginkgo Biloba]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### B-Vitamine (B12, B6)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [B - Vitamine (B12, B6) ]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [B - Vitamine (B12, B6) ]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Folan- und Niacin Präparate
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Folan- und Niacin Präparate ]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Folan- und Niacin Präparate ]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Koffeintabletten
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Koffeintabletten ]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Koffeintabletten ]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Modafinil (Vigil)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Modafinil (Vigil)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Modafinil (Vigil)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Pflanzliche Antidepressiva (Johanniskraut)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Pflanzliche Antidepressiva (Johanniskraut)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Pflanzliche Antidepressiva (Johanniskraut)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Cannabis
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Cannabis]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Cannabis]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Amphetamine (z.B. Speed)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Amphetamine (z.B. Speed)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Amphetamine (z.B. Speed)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### MDMA (Ecstasy)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [MDMA (Ecstasy)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [MDMA (Ecstasy)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Methamphetamine (z.B. Crystal Meth, Thaipille)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Methamphetamine (z.B. Crystal Meth, Thaipille)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Methamphetamine (z.B. Crystal Meth, Thaipille)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+```{r}
+names(pne)
 ```
