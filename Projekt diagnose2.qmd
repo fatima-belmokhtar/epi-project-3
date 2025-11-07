@@ -1852,7 +1852,7 @@ pne <- pne %>%
 table(pne[["Welches Abschlussziel strebst du derzeit an? "]], useNA = "ifany")
 ```
 
-### Abschlussziel Sonstiges Feld löschen (funktioniert iwie nicht)
+### Abschlussziel Sonstiges Feld löschen
 
 ```{r}
 pne <- pne %>% 
