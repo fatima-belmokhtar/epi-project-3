@@ -1,0 +1,16 @@
+"0","pne <- pne %>%"
+"0","  mutate("
+"0","    `Welches Abschlussziel strebst du derzeit an? ` ="
+"0","      recode("
+"0","        `Welches Abschlussziel strebst du derzeit an? `,"
+"0","        ""Bachelor"" = 1L,"
+"0","        ""Master"" = 2L,"
+"0","        ""Duales Bachelor-Studium"" = 3L,"
+"0","        ""Staatsexamen"" = 4L"
+"0","      )"
+"0","  )"
+"0","table(pne[[""Welches Abschlussziel strebst du derzeit an? ""]], useNA = ""ifany"")"
+"1","
+  1   2   3   4 
+105  49  12  41 
+"

@@ -1,0 +1,16 @@
+"0","# Spalte umkodieren (ja = 1, nein = 0)"
+"0","pne[[""In welchen Situationen konsumierst du PNE?   [Zur Vorbereitung für Abschlussarbeiten und -Projekte]""]] <-"
+"0","  ifelse("
+"0","    tolower(trimws(pne[[""In welchen Situationen konsumierst du PNE?   [Zur Vorbereitung für Abschlussarbeiten und -Projekte]""]])) == ""ja"", 1,"
+"0","    ifelse("
+"0","      tolower(trimws(pne[[""In welchen Situationen konsumierst du PNE?   [Zur Vorbereitung für Abschlussarbeiten und -Projekte]""]])) == ""nein"", 0,"
+"0","      NA"
+"0","    )"
+"0","  )"
+"0",""
+"0","# Kontrolle"
+"0","table(pne[[""In welchen Situationen konsumierst du PNE?   [Zur Vorbereitung für Abschlussarbeiten und -Projekte]""]], useNA = ""ifany"")"
+"1","
+   0    1 <NA> 
+  33    2  183 
+"

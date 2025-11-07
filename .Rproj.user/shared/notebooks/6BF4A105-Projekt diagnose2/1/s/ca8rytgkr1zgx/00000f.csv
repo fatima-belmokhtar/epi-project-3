@@ -1,0 +1,17 @@
+"0","# Spalte umkodieren (ja = 1, nein = 0)"
+"0",""
+"0","pne[[""In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Vollzeit (mehr als 35h/Woche)]""]] <-"
+"0","  ifelse("
+"0","    tolower(trimws(pne[[""In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Vollzeit (mehr als 35h/Woche)]""]])) == ""ja"", 1,"
+"0","    ifelse("
+"0","      tolower(trimws(pne[[""In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Vollzeit (mehr als 35h/Woche)]""]])) == ""nein"", 0,"
+"0","      NA"
+"0","    )"
+"0","  )"
+"0",""
+"0","# Kontrolle"
+"0","table(pne[[""In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Vollzeit (mehr als 35h/Woche)]""]], useNA = ""ifany"")"
+"1","
+   0    1 <NA> 
+  63    4  140 
+"

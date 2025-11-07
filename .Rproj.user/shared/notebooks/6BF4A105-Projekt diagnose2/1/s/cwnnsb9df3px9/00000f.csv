@@ -1,0 +1,16 @@
+"0","# Spalte umkodieren (ja = 1, nein = 0)"
+"0","pne[[""Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Andauernde Krankheiten, Funktionseinschränkungen oder Behinderungen ]""]] <-"
+"0","  ifelse("
+"0","    tolower(trimws(pne[[""Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Andauernde Krankheiten, Funktionseinschränkungen oder Behinderungen ]""]])) == ""ja"", 1,"
+"0","    ifelse("
+"0","      tolower(trimws(pne[[""Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Andauernde Krankheiten, Funktionseinschränkungen oder Behinderungen ]""]])) == ""nein"", 0,"
+"0","      NA"
+"0","    )"
+"0","  )"
+"0",""
+"0","# Kontrolle"
+"0","table(pne[[""Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Andauernde Krankheiten, Funktionseinschränkungen oder Behinderungen ]""]], useNA = ""ifany"")"
+"1","
+   0    1 <NA> 
+  93   10  104 
+"

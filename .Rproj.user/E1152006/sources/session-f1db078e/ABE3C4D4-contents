@@ -1,0 +1,2146 @@
+---
+title: "pne_Analyse (27.10.2025)"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(dplyr)
+library(labelled)
+library(readr)
+library(stringr)
+library(tidyr)
+library(purrr)
+library(forcats)
+library(readxl)
+library(here)
+```
+
+You can add options to executable code like this
+
+```{r}
+setwd("/Users/mercedesadedara/Documents/Uni Dateien/Master Epi/3 Semester/Projekt")
+
+pne <- read_excel("Rohdatensatz 27.10 (grundauszählung).xlsx")
+```
+
+## Zeilen löschen
+
+```{r}
+pne <- pne[-c(208:218), ]   # löscht Zeile 208 bis 2018, die waren leer
+
+```
+
+### Auszählung (Diagnose)
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADS]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Autismus]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Depression ]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Angststörungen ]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schizophrenie]`  == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Migräne ]`  == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schlafstörung (Insomnie)]` == "Ja", na.rm = TRUE)
+```
+
+```{r}
+sum(pne$`Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Ich habe keine der oben genannten Diagnosen]` == "Ja", na.rm = TRUE)
+```
+
+### Variablen Kodieren und umbenennen
+
+#### immatrikuliert kodiert
+
+```{r}
+
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bist du aktuell an einer Hochschule in Deutschland immatrikuliert?"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bist du aktuell an einer Hochschule in Deutschland immatrikuliert?"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bist du aktuell an einer Hochschule in Deutschland immatrikuliert?"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bist du aktuell an einer Hochschule in Deutschland immatrikuliert?"]], useNA = "ifany")
+
+```
+
+#### Geisteswissenschaften kodiert
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Geisteswissenschaften]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bist du aktuell an einer Hochschule in Deutschland immatrikuliert?"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Geisteswissenschaften]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Geisteswissenschaften]"]], useNA = "ifany")
+
+```
+
+#### Sozialwissenschaften
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sozialwissenschaften]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sozialwissenschaften]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sozialwissenschaften]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sozialwissenschaften]"]], useNA = "ifany")
+
+```
+
+#### Wirtschaftswissenschaften
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Wirtschaftswissenschaften]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Wirtschaftswissenschaften]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Wirtschaftswissenschaften]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Wirtschaftswissenschaften]"]], useNA = "ifany")
+
+```
+
+#### Naturwissenschaften
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Naturwissenschaften]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Naturwissenschaften]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Naturwissenschaften]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Naturwissenschaften]"]], useNA = "ifany")
+
+```
+
+#### Ingenieurwissenschaften
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Ingenieurwissenschaften]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Ingenieurwissenschaften]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Ingenieurwissenschaften]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Ingenieurwissenschaften]"]], useNA = "ifany")
+
+```
+
+#### Agrar-, Forst- und Ernährungswissenschaften
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Agrar-, Forst- und Ernährungswissenschaften ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Agrar-, Forst- und Ernährungswissenschaften ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Agrar-, Forst- und Ernährungswissenschaften ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Agrar-, Forst- und Ernährungswissenschaften ]"]], useNA = "ifany")
+```
+
+#### Sportswissenschaften
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sportwissenschaften]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sportwissenschaften]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sportwissenschaften]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sportwissenschaften]"]], useNA = "ifany")
+```
+
+#### Theologie / Religionswissenschaften
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Theologie / Religionswissenschaften]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Theologie / Religionswissenschaften]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Theologie / Religionswissenschaften]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Theologie / Religionswissenschaften]"]], useNA = "ifany")
+
+
+```
+
+#### Philosophie
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Philosophie]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Philosophie]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Philosophie]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Philosophie]"]], useNA = "ifany")
+```
+
+### Erziehungswissenschaften / Pädagogik
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Erziehungswissenschaften / Pädagogik]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Erziehungswissenschaften / Pädagogik]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Erziehungswissenschaften / Pädagogik]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Erziehungswissenschaften / Pädagogik]"]], useNA = "ifany")
+```
+
+### Sprachwissenschaften
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sprachwissenschaften]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sprachwissenschaften]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sprachwissenschaften]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Sprachwissenschaften]"]], useNA = "ifany")
+```
+
+### Informatik, Mathematik
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Informatik, Mathematik ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Informatik, Mathematik ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Informatik, Mathematik ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Informatik, Mathematik ]"]], useNA = "ifany")
+```
+
+#### Medizin, Human- und Gesundheitswissenschaften
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Medizin, Human- und Gesundheitswissenschaften]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Medizin, Human- und Gesundheitswissenschaften]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Medizin, Human- und Gesundheitswissenschaften]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Medizin, Human- und Gesundheitswissenschaften]"]], useNA = "ifany")
+```
+
+### Rechtswissenschaften
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Rechtswissenschaften]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Rechtswissenschaften]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Rechtswissenschaften]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Rechtswissenschaften]"]], useNA = "ifany")
+```
+
+#### Kunst, Musik, Design
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Kunst, Musik, Design]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Kunst, Musik, Design]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Kunst, Musik, Design]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Kunst, Musik, Design]"]], useNA = "ifany")
+```
+
+#### Lehramt
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Lehramt]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Lehramt]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Lehramt]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welcher Fachrichtung bist du derzeit immatrikuliert? [Lehramt]"]], useNA = "ifany")
+```
+
+### Sonstiges
+
+## Diagnose
+
+#### ADS
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADS]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADS]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADS]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADS]"]], useNA = "ifany")
+```
+
+#### ADHS
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]"]], useNA = "ifany")
+```
+
+#### Autismus
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Autismus]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Autismus]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Autismus]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Autismus]"]], useNA = "ifany")
+```
+
+#### Depression
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Depression ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Depression ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Depression ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Depression ]"]], useNA = "ifany")
+```
+
+#### Angststörungen
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Angststörungen ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Angststörungen ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Angststörungen ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Angststörungen ]"]], useNA = "ifany")
+```
+
+#### Schizophrenie
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schizophrenie]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schizophrenie]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schizophrenie]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schizophrenie]"]], useNA = "ifany")
+```
+
+#### Migräne
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Migräne ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Migräne ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Migräne ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Migräne ]"]], useNA = "ifany")
+```
+
+#### Schlafstörung (Insomnie)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schlafstörung (Insomnie)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schlafstörung (Insomnie)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schlafstörung (Insomnie)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schlafstörung (Insomnie)]"]], useNA = "ifany")
+```
+
+#### Ich habe keine der oben genannten Diagnosen
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Ich habe keine der oben genannten Diagnosen]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Ich habe keine der oben genannten Diagnosen]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Ich habe keine der oben genannten Diagnosen]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Ich habe keine der oben genannten Diagnosen]"]], useNA = "ifany")
+```
+
+#### Sonstiges
+
+## Lebenszeitptävalenz
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Hast du jemals in deinem Leben PNE konsumiert? "]] <-
+  ifelse(
+    tolower(trimws(pne[["Hast du jemals in deinem Leben PNE konsumiert? "]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Hast du jemals in deinem Leben PNE konsumiert? "]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Hast du jemals in deinem Leben PNE konsumiert? "]], useNA = "ifany")
+```
+
+## Konsum zwecks kognitiver Fähigkeiten
+
+#### Ginkgo Biloba
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Ginkgo Biloba]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Ginkgo Biloba]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Ginkgo Biloba]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Ginkgo Biloba]"]], useNA = "ifany")
+```
+
+B - Vitamine (B12, B6)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [B - Vitamine (B12, B6) ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [B - Vitamine (B12, B6) ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [B - Vitamine (B12, B6) ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [B - Vitamine (B12, B6) ]"]], useNA = "ifany")
+```
+
+#### Folan- und Niacin Präparate
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Folan- und Niacin Präparate ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Folan- und Niacin Präparate ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Folan- und Niacin Präparate ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Folan- und Niacin Präparate ]"]], useNA = "ifany")
+```
+
+#### Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)]"]], useNA = "ifany")
+```
+
+#### Koffeintabletten
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Koffeintabletten ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Koffeintabletten ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Koffeintabletten ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Koffeintabletten ]"]], useNA = "ifany")
+```
+
+#### Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]"]], useNA = "ifany")
+```
+
+### Modafinil (Vigil)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]], useNA = "ifany")
+```
+
+#### Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]"]], useNA = "ifany")
+
+```
+
+#### Pflanzliche Antidepressiva (Johanniskraut)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]], useNA = "ifany")
+```
+
+### Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]"]], useNA = "ifany")
+```
+
+### Cannabis
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Cannabis]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Cannabis]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Cannabis]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Cannabis]"]], useNA = "ifany")
+```
+
+### Amphetamine (z.B. Speed)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Amphetamine (z.B. Speed)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Amphetamine (z.B. Speed)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Amphetamine (z.B. Speed)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Amphetamine (z.B. Speed)]"]], useNA = "ifany")
+```
+
+### MDMA (Ecstasy)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [MDMA (Ecstasy)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [MDMA (Ecstasy)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [MDMA (Ecstasy)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [MDMA (Ecstasy)]"]], useNA = "ifany")
+```
+
+### Methamphetamine (z.B. Crystal Meth, Thaipille)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methamphetamine (z.B. Crystal Meth, Thaipille)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methamphetamine (z.B. Crystal Meth, Thaipille)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methamphetamine (z.B. Crystal Meth, Thaipille)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methamphetamine (z.B. Crystal Meth, Thaipille)]"]], useNA = "ifany")
+```
+
+### Keine der aufgelisteten Substanzen
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]"]], useNA = "ifany")
+```
+
+## Konsum zwecks Stressbewältigung
+
+### Ginko Biloba
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Ginko Biloba]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Ginko Biloba]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Ginko Biloba]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Ginko Biloba]"]], useNA = "ifany")
+```
+
+### B - Vitamine (B12, B6)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [B - Vitamine (B12, B6)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [B - Vitamine (B12, B6)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [B - Vitamine (B12, B6)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [B - Vitamine (B12, B6)]"]], useNA = "ifany")
+```
+
+### Folan- und Niacin Präparate
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Folan- und Niacin Präparate]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Folan- und Niacin Präparate]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Folan- und Niacin Präparate]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Folan- und Niacin Präparate]"]], useNA = "ifany")
+```
+
+### Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian )
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian )]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian )]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian )]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian )]"]], useNA = "ifany")
+```
+
+### Koffeintabletten
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Koffeintabletten]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Koffeintabletten]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Koffeintabletten)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Koffeintabletten]"]], useNA = "ifany")
+```
+
+### Methylphenidat (Ritalin, Mediziner, Concetta, Equasym, Rubinen)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Mediziner, Concetta, Equasym, Rubinen)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Mediziner, Concetta, Equasym, Rubinen)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Mediziner, Concetta, Equasym, Rubinen)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Mediziner, Concetta, Equasym, Rubinen)]"]], useNA = "ifany")
+```
+
+### Modafinil (Vigil)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Modafinil (Vigil)]"]], useNA = "ifany")
+```
+
+### Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Flutti, Sertralin AL)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Flutti, Sertralin AL)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Flutti, Sertralin AL)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Flutti, Sertralin AL)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Flutti, Sertralin AL)]"]], useNA = "ifany")
+```
+
+### Pflanzliche Antidepressiva (Johanniskraut)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]"]], useNA = "ifany")
+```
+
+### Antidementiva (Aricept, Exelon, Reminyl, Ebixa/Axura)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/Axura)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/Axura)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/Axura)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/Axura)]"]], useNA = "ifany")
+```
+
+### Cannabis
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Cannabis]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Cannabis]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Cannabis]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Cannabis]"]], useNA = "ifany")
+```
+
+### Amphetamine (z.B. Speed)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Amphetamine (z.B. Speed)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Amphetamine (z.B. Speed)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Amphetamine (z.B. Speed)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Amphetamine (z.B. Speed)]"]], useNA = "ifany")
+```
+
+### MDMA (Ecstasy)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [MDMA (Ecstasy)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [MDMA (Ecstasy)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [MDMA (Ecstasy)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [MDMA (Ecstasy)]"]], useNA = "ifany")
+```
+
+### Methamphetamine (z.B. Crystal Meth, Thaipille)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Methamphetamine (z.B. Crystal Meth, Thaipille)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Methamphetamine (z.B. Crystal Meth, Thaipille)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Methamphetamine (z.B. Crystal Meth, Thaipille)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Methamphetamine (z.B. Crystal Meth, Thaipille)]"]], useNA = "ifany")
+```
+
+### Keine der aufgelisteten Substanzen
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]"]], useNA = "ifany")
+```
+
+## Häufigkeit (Konsum)
+
+### 12 Monate
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 12 Monate PNE konsumiert.]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 12 Monate PNE konsumiert.]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 12 Monate PNE konsumiert.]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 12 Monate PNE konsumiert.]"]], useNA = "ifany")
+```
+
+### 30 Tage
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 30 Tage PNE konsumiert.]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 30 Tage PNE konsumiert.]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 30 Tage PNE konsumiert.]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 30 Tage PNE konsumiert.]"]], useNA = "ifany")
+```
+
+### 7 Tage
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 7 Tage PNE konsumiert.]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 7 Tage PNE konsumiert.]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 7 Tage PNE konsumiert.]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 7 Tage PNE konsumiert.]"]], useNA = "ifany")
+```
+
+### Konsumumstände
+
+### Unmittelbar vor Prüfungen
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchen Situationen konsumierst du PNE?   [Unmittelbar vor Prüfungen, Präsentationen und anderen Leistungsnachweisen]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Unmittelbar vor Prüfungen, Präsentationen und anderen Leistungsnachweisen]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Unmittelbar vor Prüfungen, Präsentationen und anderen Leistungsnachweisen]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchen Situationen konsumierst du PNE?   [Unmittelbar vor Prüfungen, Präsentationen und anderen Leistungsnachweisen]"]], useNA = "ifany")
+```
+
+### Während der Prüfungsvorbereitung
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchen Situationen konsumierst du PNE?   [Während der Prüfungsvorbereitung]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Während der Prüfungsvorbereitung]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Während der Prüfungsvorbereitung]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchen Situationen konsumierst du PNE?   [Während der Prüfungsvorbereitung]"]], useNA = "ifany")
+```
+
+### Für die gleichzeitige Bewältigung von Studium und Nebenjob
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchen Situationen konsumierst du PNE?   [Für die gleichzeitige Bewältigung von Studium und Nebenjob]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Für die gleichzeitige Bewältigung von Studium und Nebenjob]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Für die gleichzeitige Bewältigung von Studium und Nebenjob]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchen Situationen konsumierst du PNE?   [Für die gleichzeitige Bewältigung von Studium und Nebenjob]"]], useNA = "ifany")
+```
+
+### Um in Gruppenarbeiten kognitiv leistungsfähig zu bleiben
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchen Situationen konsumierst du PNE?   [Um in Gruppenarbeiten kognitiv leistungsfähig zu bleiben]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Um in Gruppenarbeiten kognitiv leistungsfähig zu bleiben]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Um in Gruppenarbeiten kognitiv leistungsfähig zu bleiben]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchen Situationen konsumierst du PNE?   [Um in Gruppenarbeiten kognitiv leistungsfähig zu bleiben]"]], useNA = "ifany")
+```
+
+### Bei Schlafmangel
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchen Situationen konsumierst du PNE?   [Bei Schlafmangel ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Bei Schlafmangel ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Bei Schlafmangel ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchen Situationen konsumierst du PNE?   [Bei Schlafmangel ]"]], useNA = "ifany")
+```
+
+### Während des Uni-Alltags (z.B. beim Besuch von Veranstaltungen)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchen Situationen konsumierst du PNE?   [Während des Uni-Alltags (z.B. beim Besuch von Veranstaltungen)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Während des Uni-Alltags (z.B. beim Besuch von Veranstaltungen)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Während des Uni-Alltags (z.B. beim Besuch von Veranstaltungen)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchen Situationen konsumierst du PNE?   [Während des Uni-Alltags (z.B. beim Besuch von Veranstaltungen)]"]], useNA = "ifany")
+```
+
+### Zur Vorbereitung für Abschlussarbeiten und -Projekte
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchen Situationen konsumierst du PNE?   [Zur Vorbereitung für Abschlussarbeiten und -Projekte]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Zur Vorbereitung für Abschlussarbeiten und -Projekte]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchen Situationen konsumierst du PNE?   [Zur Vorbereitung für Abschlussarbeiten und -Projekte]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchen Situationen konsumierst du PNE?   [Zur Vorbereitung für Abschlussarbeiten und -Projekte]"]], useNA = "ifany")
+```
+
+### Sonstiges -\> kein ja & nein
+
+## Effekt
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Konnte der gewünschte Effekt erzielt werden?"]] <-
+  ifelse(
+    tolower(trimws(pne[["Konnte der gewünschte Effekt erzielt werden?"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Konnte der gewünschte Effekt erzielt werden?"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Konnte der gewünschte Effekt erzielt werden?"]], useNA = "ifany")
+```
+
+### Stressoren
+
+#### Zeitdruck
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Zeitdruck ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Zeitdruck ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Zeitdruck ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Zeitdruck ]"]], useNA = "ifany")
+```
+
+#### Care-Tätigkeiten / Pflege von Angehörigen
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Care-Tätigkeiten / Pflege von Angehörigen ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Care-Tätigkeiten / Pflege von Angehörigen ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Care-Tätigkeiten / Pflege von Angehörigen ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Care-Tätigkeiten / Pflege von Angehörigen ]"]], useNA = "ifany")
+```
+
+#### Erschwerte Vereinbarkeit von Studium und Erwerbstätigkeit
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Erschwerte Vereinbarkeit von Studium und Erwerbstätigkeit]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Erschwerte Vereinbarkeit von Studium und Erwerbstätigkeit]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Erschwerte Vereinbarkeit von Studium und Erwerbstätigkeit]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Erschwerte Vereinbarkeit von Studium und Erwerbstätigkeit]"]], useNA = "ifany")
+```
+
+#### Soziale Konflikte (z.B. am Arbeitsplatz, Freunde und Familie, Konflikte in der Partnerschaft)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Soziale Konflikte (z.B. am Arbeitsplatz, Freunde und Familie, Konflikte in der Partnerschaft)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Soziale Konflikte (z.B. am Arbeitsplatz, Freunde und Familie, Konflikte in der Partnerschaft)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Soziale Konflikte (z.B. am Arbeitsplatz, Freunde und Familie, Konflikte in der Partnerschaft)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Soziale Konflikte (z.B. am Arbeitsplatz, Freunde und Familie, Konflikte in der Partnerschaft)]"]], useNA = "ifany")
+```
+
+#### Umzug
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Umzug ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Umzug ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Umzug ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Umzug ]"]], useNA = "ifany")
+```
+
+#### Einsamkeit
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Einsamkeit]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Einsamkeit]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Einsamkeit]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Einsamkeit]"]], useNA = "ifany")
+```
+
+#### Erlebte Ausgrenzung (z.B. Mobbing)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Erlebte Ausgrenzung (z.B. Mobbing)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Erlebte Ausgrenzung (z.B. Mobbing)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Erlebte Ausgrenzung (z.B. Mobbing)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Erlebte Ausgrenzung (z.B. Mobbing)]"]], useNA = "ifany")
+```
+
+#### Überforderung
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Überforderung ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Überforderung ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Überforderung ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Überforderung ]"]], useNA = "ifany")
+```
+
+#### Andauernde Krankheiten, Funktionseinschränkungen oder Behinderungen
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Andauernde Krankheiten, Funktionseinschränkungen oder Behinderungen ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Andauernde Krankheiten, Funktionseinschränkungen oder Behinderungen ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Andauernde Krankheiten, Funktionseinschränkungen oder Behinderungen ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Andauernde Krankheiten, Funktionseinschränkungen oder Behinderungen ]"]], useNA = "ifany")
+```
+
+#### Finanzielle Situation
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Finanzielle Situation ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Finanzielle Situation ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Finanzielle Situation ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Finanzielle Situation ]"]], useNA = "ifany")
+```
+
+#### Ängste (z.B. Zukunfts- und Versagensängste, Prüfungs- und Leistungsdruck, Selbstzweifel)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Ängste (z.B. Zukunfts- und Versagensängste, Prüfungs- und Leistungsdruck, Selbstzweifel)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Ängste (z.B. Zukunfts- und Versagensängste, Prüfungs- und Leistungsdruck, Selbstzweifel)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Ängste (z.B. Zukunfts- und Versagensängste, Prüfungs- und Leistungsdruck, Selbstzweifel)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Ängste (z.B. Zukunfts- und Versagensängste, Prüfungs- und Leistungsdruck, Selbstzweifel)]"]], useNA = "ifany")
+```
+
+#### Konkurrenz
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Konkurrenz ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Konkurrenz ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Konkurrenz ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Konkurrenz ]"]], useNA = "ifany")
+```
+
+#### Keine der genannten
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Keine der genannten]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Keine der genannten]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Keine der genannten]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Bitte gib an, welche Stressoren derzeit auf dich zutreffen.  [Keine der genannten]"]], useNA = "ifany")
+```
+
+### Finanzielle Situation (Lebensunterhalt)
+
+#### Erwerbstätigkeit
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Erwerbstätigkeit ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Erwerbstätigkeit ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Erwerbstätigkeit ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Erwerbstätigkeit ]"]], useNA = "ifany") 
+```
+
+#### Familiäre Unterstützung
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Familiäre Unterstützung ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Familiäre Unterstützung ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Familiäre Unterstützung ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Familiäre Unterstützung ]"]], useNA = "ifany") 
+```
+
+#### BAföG
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [BAföG]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [BAföG]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [BAföG]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [BAföG]"]], useNA = "ifany")
+```
+
+#### Stipendium
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Stipendium]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Stipendium]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Stipendium]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Stipendium]"]], useNA = "ifany")
+```
+
+#### Studienkredit
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Studienkredit ]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Studienkredit ]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Studienkredit ]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Studienkredit ]"]], useNA = "ifany")
+```
+
+#### Ersparnisse
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+
+pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Ersparnisse]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Ersparnisse]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Ersparnisse]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Aus welchen der folgenden Quellen bestreitest du aktuell deinen Lebensunterhalt?   [Ersparnisse]"]], useNA = "ifany")
+```
+
+#### Sonstiges -\> nicht ja nein
+
+## Finanzielle Situation (Beschäftigungsverhältnis)
+
+#### Vollzeit (mehr als 35h/Woche)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+
+pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Vollzeit (mehr als 35h/Woche)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Vollzeit (mehr als 35h/Woche)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Vollzeit (mehr als 35h/Woche)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Vollzeit (mehr als 35h/Woche)]"]], useNA = "ifany")
+```
+
+#### Teilzeit (mind. 15/h Woche)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Teilzeit (mind. 15/h Woche)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Teilzeit (mind. 15/h Woche)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Teilzeit (mind. 15/h Woche)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Teilzeit (mind. 15/h Woche)]"]], useNA = "ifany")
+```
+
+#### Werkstudent\*in
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Werkstudent*in]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Werkstudent*in]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Werkstudent*in]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Werkstudent*in]"]], useNA = "ifany")
+```
+
+#### Minijob
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Minijob]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Minijob]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Minijob]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Minijob]"]], useNA = "ifany")
+```
+
+#### Duales Studium
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Duales Studium]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Duales Studium]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Duales Studium]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Duales Studium]"]], useNA = "ifany")
+```
+
+#### Praktikum (bezahlt)
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Praktikum (bezahlt)]"]] <-
+  ifelse(
+    tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Praktikum (bezahlt)]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Praktikum (bezahlt)]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["In welchem Beschäftigungsverhältnis befindest du dich derzeit?  [Praktikum (bezahlt)]"]], useNA = "ifany")
+```
+
+## Geschlecht (aktuell)
+
+#### weiblich
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [weiblich]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [weiblich]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [weiblich]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [weiblich]"]], useNA = "ifany")
+```
+
+#### Männlich
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [Männlich]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [Männlich]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [Männlich]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [Männlich]"]], useNA = "ifany")
+```
+
+#### trans\*
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [trans*]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [trans*]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [trans*]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [trans*]"]], useNA = "ifany")
+```
+
+#### inter\*
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [inter*]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [inter*]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [inter*]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [inter*]"]], useNA = "ifany")
+```
+
+#### nicht-binär\*
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [nicht-binär*]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [nicht-binär*]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [nicht-binär*]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [nicht-binär*]"]], useNA = "ifany")
+```
+
+#### agender/ kein Geschlecht
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [agender/ kein Geschlecht]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [agender/ kein Geschlecht]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [agender/ kein Geschlecht]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [agender/ kein Geschlecht]"]], useNA = "ifany")
+```
+
+#### genderfluid
+
+```{r}
+# Spalte umkodieren (ja = 1, nein = 0)
+pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [genderfluid]"]] <-
+  ifelse(
+    tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [genderfluid]"]])) == "ja", 1,
+    ifelse(
+      tolower(trimws(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [genderfluid]"]])) == "nein", 0,
+      NA
+    )
+  )
+
+# Kontrolle
+table(pne[["Mit welchem Geschlecht identifizierst du dich aktuell? [genderfluid]"]], useNA = "ifany")
+```
+
+### Bundesland
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `In welchem Bundesland bist du an einer Hochschule immatrikuliert?` =
+      recode(
+        `In welchem Bundesland bist du an einer Hochschule immatrikuliert?`,
+        "Bremen" = 1L,
+        "Niedersachsen" = 2L,
+        "Hamburg" = 3L,
+        "Hessen" = 4L,
+        "Nordrhein-Westfalen" = 5L,
+        "Bayern" = 6L,
+        "Schleswig-Holstein" = 7L,
+        "Baden-Württemberg" = 8L,
+        "Berlin" = 9L,
+        "Sachsen" = 10L,
+        "Rheinland-Pfalz" = 11L
+      )
+  )
+table(pne[["In welchem Bundesland bist du an einer Hochschule immatrikuliert?"]], useNA = "ifany")
+```
+
+### Abschlussziel
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welches Abschlussziel strebst du derzeit an? ` =
+      recode(
+        `Welches Abschlussziel strebst du derzeit an? `,
+        "Bachelor" = 1L,
+        "Master" = 2L,
+        "Duales Bachelor-Studium" = 3L,
+        "Staatsexamen" = 4L
+      )
+  )
+table(pne[["Welches Abschlussziel strebst du derzeit an? "]], useNA = "ifany")
+```
+
+### Abschlussziel Sonstiges Feld löschen
+
+```{r}
+pne <- pne %>% 
+  select(-`Welches Abschlussziel strebst du derzeit an?  [Sonstiges]`)
+```
+
+### Häufigkeit (Konsum Studienbeginn)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Wie häufig hast du seit Beginn deines Studiums Substanzen eingenommen, um besser mit den Anforderungen des Studiums zurechtzukommen (z. B. Mittel zur Stressbewältigung oder Leistungssteigerung)? ` = recode(
+      `Wie häufig hast du seit Beginn deines Studiums Substanzen eingenommen, um besser mit den Anforderungen des Studiums zurechtzukommen (z. B. Mittel zur Stressbewältigung oder Leistungssteigerung)? `,
+      "Ich habe solche Substanzen nur ganz selten eingenommen." = 1,
+      "Ich nehme solche Substanzen ab und zu ein." = 2,
+      "Ich nehme solche Substanzen häufig ein." = 3
+    )
+  )
+```
+
+# Häufigkeit (Art)
+
+### Ginkgo Biloba
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Ginkgo Biloba]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Ginkgo Biloba]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### B-Vitamine (B12, B6)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [B - Vitamine (B12, B6) ]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [B - Vitamine (B12, B6) ]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Folan- und Niacin Präparate
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Folan- und Niacin Präparate ]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Folan- und Niacin Präparate ]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Schlaf- und Beruhigungsmittel (z.B. Melatonin, Passionsblume, Baldrian)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Koffeintabletten
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Koffeintabletten ]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Koffeintabletten ]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Modafinil (Vigil)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Modafinil (Vigil)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Modafinil (Vigil)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Antidepressiva (z.B. Cipralex, Cipramil, Zoloft, Cymbalta, Fluctin, Sertralin AL)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Pflanzliche Antidepressiva (Johanniskraut)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Pflanzliche Antidepressiva (Johanniskraut)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Pflanzliche Antidepressiva (Johanniskraut)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Antidementiva (Aricept, Exelon, Reminyl, Ebixa/ Axura)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Cannabis
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Cannabis]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Cannabis]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Amphetamine (z.B. Speed)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Amphetamine (z.B. Speed)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Amphetamine (z.B. Speed)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### MDMA (Ecstasy)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [MDMA (Ecstasy)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [MDMA (Ecstasy)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+### Methamphetamine (z.B. Crystal Meth, Thaipille)
+
+```{r}
+pne <- pne %>%
+  mutate(
+    `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Methamphetamine (z.B. Crystal Meth, Thaipille)]` = recode(
+      `Welche der folgenden Substanzen konsumierst du in welcher Häufigkeit? [Methamphetamine (z.B. Crystal Meth, Thaipille)]`,
+      "nie" = 1,
+      "selten" = 2,
+      "1x pro Monat" = 3,
+      "2-3x pro Monat" = 4,
+      "1x pro Woche" = 5,
+      "2-3x pro Woche" = 6,
+      "3-6x pro Woche" = 7,
+      "täglich" = 8
+    )
+  )
+```
+
+```{r}
+names(pne)
+```

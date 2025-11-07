@@ -1,0 +1,16 @@
+"0","# Spalte umkodieren (ja = 1, nein = 0)"
+"0","pne[[""Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]""]] <-"
+"0","  ifelse("
+"0","    tolower(trimws(pne[[""Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]""]])) == ""ja"", 1,"
+"0","    ifelse("
+"0","      tolower(trimws(pne[[""Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]""]])) == ""nein"", 0,"
+"0","      NA"
+"0","    )"
+"0","  )"
+"0",""
+"0","# Kontrolle"
+"0","table(pne[[""Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]""]], useNA = ""ifany"")"
+"1","
+   0    1 <NA> 
+ 198    9   11 
+"

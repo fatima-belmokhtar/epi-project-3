@@ -1,0 +1,16 @@
+"0","# Spalte umkodieren (ja = 1, nein = 0)"
+"0","pne[[""Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]""]] <-"
+"0","  ifelse("
+"0","    tolower(trimws(pne[[""Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]""]])) == ""ja"", 1,"
+"0","    ifelse("
+"0","      tolower(trimws(pne[[""Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]""]])) == ""nein"", 0,"
+"0","      NA"
+"0","    )"
+"0","  )"
+"0",""
+"0","# Kontrolle"
+"0","table(pne[[""Nimmst du für den Zweck der Steigerung der eigenen kognitiven Leistung eine oder mehrere der unten stehenden Substanzen ein?  [Methylphenidat (Ritalin, Medikinet, Concerta, Equasym, Rubifen)]""]], useNA = ""ifany"")"
+"1","
+   0 <NA> 
+ 129   78 
+"

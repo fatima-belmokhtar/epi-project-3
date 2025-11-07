@@ -1,0 +1,4 @@
+"0","setwd(""/Users/mercedesadedara/Documents/Uni Dateien/Master Epi/3 Semester/Projekt"")"
+"2","G2;H2;Warningh: The working directory was changed to /Users/mercedesadedara/Documents/Uni Dateien/Master Epi/3 Semester/Projekt inside a notebook chunk. The working directory will be reset when the chunk is finished running. Use the knitr root.dir option in the setup chunk to change the working directory for notebook chunks.g
+"
+"0","pne <- read_excel(""Rohdatensatz 27.10 (grundauszählung).xlsx"")"

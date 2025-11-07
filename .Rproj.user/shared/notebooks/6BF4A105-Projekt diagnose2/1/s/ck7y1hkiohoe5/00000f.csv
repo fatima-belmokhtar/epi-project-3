@@ -1,0 +1,16 @@
+"0","# Spalte umkodieren (ja = 1, nein = 0)"
+"0","pne[[""Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]""]] <-"
+"0","  ifelse("
+"0","    tolower(trimws(pne[[""Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]""]])) == ""ja"", 1,"
+"0","    ifelse("
+"0","      tolower(trimws(pne[[""Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]""]])) == ""nein"", 0,"
+"0","      NA"
+"0","    )"
+"0","  )"
+"0",""
+"0","# Kontrolle"
+"0","table(pne[[""Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Pflanzliche Antidepressiva (Johanniskraut)]""]], useNA = ""ifany"")"
+"1","
+   0    1 <NA> 
+ 127    2   78 
+"

@@ -1,0 +1,16 @@
+"0","# Spalte umkodieren (ja = 1, nein = 0)"
+"0","pne[[""Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]""]] <-"
+"0","  ifelse("
+"0","    tolower(trimws(pne[[""Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]""]])) == ""ja"", 1,"
+"0","    ifelse("
+"0","      tolower(trimws(pne[[""Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]""]])) == ""nein"", 0,"
+"0","      NA"
+"0","    )"
+"0","  )"
+"0",""
+"0","# Kontrolle"
+"0","table(pne[[""Nimmst du für die eigene Stressbewältigung eine oder mehrere der unten stehenden Substanzen ein?  [Keine der aufgelisteten Substanzen]""]], useNA = ""ifany"")"
+"1","
+   0    1 <NA> 
+  29  100   89 
+"
