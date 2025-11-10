@@ -2399,8 +2399,14 @@ pne <- pne%>%
 ```{r}
 pne <- pne%>%
   rename(
-    prävalenz_leben = "Hast du jemals in deinem Leben PNE konsumiert?"
+    prävalenz_leben = "Hast du jemals in deinem Leben PNE konsumiert? "
   )
 
+```
+```{r}
+pne <- pne%>%
+  rename(
+    präv_12m = "Hast du innerhalb der folgenden Zeiträume PNE konsumiert?"
+  )
 ```
 
