@@ -2376,7 +2376,30 @@ names(pne)
 ```{r}
 pne <- pne%>%
   rename(
+    immatr = "Bist du aktuell an einer Hochschule in Deutschland immatrikuliert?"
+  )
+
+```
+
+```{r}
+pne <- pne%>%
+  rename(
     name_hoch = "An welcher Hochschule bist du derzeit immatrikuliert?"
+  )
+
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    semester = "In welchem Fachsemester befindest du dich derzeit? "
+  )
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    prävalenz_leben = "Hast du jemals in deinem Leben PNE konsumiert?"
   )
 
 ```
