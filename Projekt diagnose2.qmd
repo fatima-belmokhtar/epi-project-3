@@ -20,7 +20,7 @@ library(readxl)
 You can add options to executable code like this
 
 ```{r}
-setwd("/Users/mercedesadedara/Documents/Uni Dateien/Master Epi/3 Semester/Projekt")
+setwd("C:/Users/fatim/OneDrive/Dokumente/Epidemiologie Master of Science/3. Fachsemester/Epi Projekt 3/epi-project-3")
 
 pne <- read_excel("Rohdatensatz 27.10 (grundauszählung).xlsx")
 ```
@@ -2370,3 +2370,14 @@ pne <- pne %>%
 names(pne)
 
 ```
+
+#### Variablen umbennen 
+
+```{r}
+pne <- pne%>%
+  rename(
+    name_hoch = "An welcher Hochschule bist du derzeit immatrikuliert?"
+  )
+
+```
+
