@@ -2410,3 +2410,123 @@ pne <- pne%>%
   )
 ```
 
+```{r}
+pne <- pne%>%
+  rename(
+    fach_geist = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Geisteswissenschaften]"
+  )
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_sozial = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Sozialwissenschaften]"
+)
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_wirtschaft = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Wirtschaftswissenschaften]"
+)
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_natur = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Naturwissenschaften]"
+)
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_ingenieur = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Ingenieurwissenschaften]"
+)
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_agrar_forst_ernährung = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Agrar-, Forst- und Ernährungswissenschaften ]"
+)
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_sport = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Sportwissenschaften]"
+)
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_theo_reli = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Theologie / Religionswissenschaften]"
+)
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_philo = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Philosophie]"
+  )
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_erz_päd = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Erziehungswissenschaften / Pädagogik]"
+  )
+```
+
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_sprach = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Sprachwissenschaften]"
+  )
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_inf_mat = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Informatik, Mathematik ]"
+  )
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_med_human_ges = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Medizin, Human- und Gesundheitswissenschaften]"
+  )
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_recht= "In welcher Fachrichtung bist du derzeit immatrikuliert? [Rechtswissenschaften]"
+  )
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_kunst_mus_des = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Kunst, Musik, Design]"
+  )
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_lehre = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Lehramt]"
+  )
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    fach_sonst = "In welcher Fachrichtung bist du derzeit immatrikuliert? [Sonstiges]"
+  )
+```
+
