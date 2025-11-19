@@ -15,12 +15,13 @@ library(tidyr)
 library(purrr)
 library(forcats)
 library(readxl)
+library(gtsummary)
 ```
 
 You can add options to executable code like this
 
 ```{r}
-setwd("C:/Users/fatim/OneDrive/Dokumente/Epidemiologie Master of Science/3. Fachsemester/Epi Projekt 3/epi-project-3")
+setwd("/Users/mercedesadedara/Documents/Uni Dateien/Master Epi/3 Semester/Projekt")
 
 pne <- read_excel("Rohdatensatz 27.10 (grundauszählung).xlsx")
 ```
@@ -28,7 +29,7 @@ pne <- read_excel("Rohdatensatz 27.10 (grundauszählung).xlsx")
 ## Zeilen löschen
 
 ```{r}
-pne <- pne[-c(208:218), ]   # löscht Zeile 208 bis 2018, die waren leer
+pne <- pne[-c(208:218), ]   # löscht Zeile 208 bis 218, die waren leer
 
 ```
 
@@ -1835,14 +1836,18 @@ pne <- pne %>%
     geschlecht = `Welches Geschlecht wurde dir bei der Geburt zugeordnet?`
   ) %>%
   mutate(
-    geschlecht = ifelse(
-      tolower(trimws(geschlecht)) == "weiblich", 1,
-      ifelse(tolower(trimws(geschlecht)) == "männlich", 2, NA)
-    )
+    geschlecht = case_when(
+      tolower(trimws(geschlecht)) == "weiblich" ~ "weiblich",
+      tolower(trimws(geschlecht)) == "männlich" ~ "männlich",
+      TRUE ~ NA_character_
+    ),
+    geschlecht = factor(geschlecht,
+                        levels = c("weiblich", "männlich"))
   )
 
-# Kontrolle
+#Kontrolle
 table(pne$geschlecht, useNA = "ifany")
+
 ```
 
 #### Geschlecht Sonstiges Löschen (leer)
@@ -1850,6 +1855,16 @@ table(pne$geschlecht, useNA = "ifany")
 ```{r}
 pne <- pne %>% 
   select(-`Mit welchem Geschlecht identifizierst du dich aktuell? [Sonstiges]`)
+```
+
+### Alter
+
+```{r}
+pne <- pne %>%
+  rename(
+    alter = `Wie alt bist du?`
+  )
+
 ```
 
 ### Feedback Feld löschen
@@ -1870,17 +1885,17 @@ pne <- pne %>%
     bundesland = 
       factor(recode(
         bundesland,
-        "Bremen" = 1,
-        "Niedersachsen" = 2,
-        "Hamburg" = 3,
-        "Hessen" = 4,
-        "Nordrhein-Westfalen" = 5,
-        "Bayern" = 6,
-        "Schleswig-Holstein" = 7,
-        "Baden-Württemberg" = 8,
-        "Berlin" = 9,
-        "Sachsen" = 10,
-        "Rheinland-Pfalz" = 11
+        "Bremen" = "Bremen",
+        "Niedersachsen" = "Niedersachsen",
+        "Hamburg" =  "Hamburg",
+        "Hessen" = "Hessen",
+        "Nordrhein-Westfalen" =  "Nordrhein-Westfalen",
+        "Bayern" =  "Bayern",
+        "Schleswig-Holstein" =  "Schleswig-Holstein",
+        "Baden-Württemberg" =  "Baden-Württemberg",
+        "Berlin" = "Berlin",
+        "Sachsen" =  "Sachsen",
+        "Rheinland-Pfalz" = "Rheinland-Pfalz"
       ),
       ordered = FALSE
       )
@@ -1898,10 +1913,10 @@ pne <- pne %>%
     abschlussziel = 
       factor(recode(
          abschlussziel,
-        "Bachelor" = 1,
-        "Master" = 2,
-        "Duales Bachelor-Studium" = 3,
-        "Staatsexamen" = 4
+        "Bachelor" = "Bachelor",
+        "Master" = "Master",
+        "Duales Bachelor-Studium" =  "Duales Bachelor-Studium",
+        "Staatsexamen" = "Staatsexamen"
     ),
       ordered = FALSE
       )
@@ -2366,12 +2381,9 @@ pne <- pne %>%
   ))
 ```
 
-```{r}
-names(pne)
+#### Variablen umbennen
 
-```
-
-#### Variablen umbennen 
+##### immatrikulation
 
 ```{r}
 pne <- pne%>%
@@ -2381,6 +2393,8 @@ pne <- pne%>%
 
 ```
 
+##### Hochschule
+
 ```{r}
 pne <- pne%>%
   rename(
@@ -2389,6 +2403,8 @@ pne <- pne%>%
 
 ```
 
+##### Fachsemester
+
 ```{r}
 pne <- pne%>%
   rename(
@@ -2396,19 +2412,28 @@ pne <- pne%>%
   )
 ```
 
+##### Lebenszeitprävalenz
+
 ```{r}
 pne <- pne%>%
   rename(
-    prävalenz_leben = "Hast du jemals in deinem Leben PNE konsumiert? "
+    prävalenz_leben = "Hast du jemals in deinem Leben PNE konsumiert? "
   )
 
 ```
+
+##### Prävalenz
+
 ```{r}
 pne <- pne%>%
   rename(
-    präv_12m = "Hast du innerhalb der folgenden Zeiträume PNE konsumiert?"
+    präv_12m = "Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 12 Monate PNE konsumiert.]", 
+    präv_30d = "Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 30 Tage PNE konsumiert.]", 
+    präv_7d = "Hast du innerhalb der folgenden Zeiträume PNE konsumiert?        [Ich habe innerhalb der letzten 7 Tage PNE konsumiert.]"
   )
 ```
+
+#### Fachrichtung umbenennen
 
 ```{r}
 pne <- pne%>%
@@ -2480,7 +2505,6 @@ pne <- pne%>%
   )
 ```
 
-
 ```{r}
 pne <- pne%>%
   rename(
@@ -2530,3 +2554,162 @@ pne <- pne%>%
   )
 ```
 
+#### Diagnose umbenennen (auch wenn wir das vllt. nicht brauchen)
+
+```{r}
+pne <- pne%>%
+  rename(
+    diag_ads = "Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADS]",
+    diag_adhs = "Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [ADHS]",
+    diag_autis = "Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Autismus]"
+  )
+```
+
+```{r}
+pne <- pne%>%
+  rename(
+    diag_depr = "Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Depression ]",
+    diag_angst = "Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Angststörungen ]",
+    diag_schizo = "Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schizophrenie]",
+    diag_migr = "Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Migräne ]",
+    diag_schlaf = "Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Schlafstörung (Insomnie)]",
+    diag_keine = "Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Ich habe keine der oben genannten Diagnosen]",
+    diag_sonst = "Liegt bei dir eine ärztliche Diagnose zu einer der folgenden Erkrankungen vor?  [Sonstiges]"
+  )
+```
+
+#### Nutzer  vs Nicht-Nutzer Variable erstellen
+
+```{r}
+
+pne <- pne %>%
+  mutate(
+    nutzer_status = factor(
+      ifelse(prävalenz_leben == 1, "PNE+", "PNE-"),
+      levels = c("PNE-", "PNE+")
+    )
+  )
+
+# Kontrolle
+table(pne$nutzer_status, useNA = "ifany")
+
+```
+
+#### Oberkategorie für Fachrichtung
+
+```{r}
+
+pne <- pne %>% 
+  mutate(
+    fach_oberkategorie = case_when(
+      
+      fach_geist == 1 | fach_sozial == 1 | fach_med_human_ges == 1 |
+        fach_sonst %in% c("Soziale Arbeit", "Pflege", "Pflegewissenschaft",
+                          "Psychologie", "Ökotrophologie") ~ "Gesundheit & Soziales",
+      
+      
+      fach_wirtschaft == 1 | fach_recht == 1 |
+        fach_sonst %in% c("Wirtschaftspsychologie", "Tourismusmanagement",
+                          "Marketing", "Betriebswirtschaft") ~ "Wirtschaft, Recht & Management",
+      
+      fach_ingenieur == 1 | fach_natur == 1 | fach_inf_mat == 1 |
+        fach_sonst %in% c("Maschinenbau","Ingenieurwesen","Architektur") ~ "Ingenieur-& Naturwissenschaften",
+      
+      fach_kunst_mus_des == 1 |
+        fach_sonst %in% c("Film", "Film und Medien", "Film und Medien Kunst",
+                          "Kommunikation & Medien", "Handlungswissenschaft") ~ "Kultur, Medien & Kommunikation",
+      
+      fach_theo_reli == 1 | fach_philo == 1 | fach_sprach == 1 | fach_erz_päd == 1 |
+        fach_sonst %in% c("Kulturwissenschaften", "Philosophie") ~ "Geistes- & Sprachwissenschaften"
+      
+    )
+  )
+
+```
+
+#### Table 1 Tabelle erstellen
+
+```{r}
+
+Tabelle1 <- pne %>%
+  select(nutzer_status, alter, geschlecht, 
+         abschlussziel,semester, starts_with("fach_"), bundesland,
+         ) %>%
+  tbl_summary(
+    by = nutzer_status,
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{n} ({p}%)"
+    ),
+    label = list(
+      alter ~ "Alter (in Jahren)",
+      geschlecht ~ "Geschlecht",
+      abschlussziel ~ "Abschlussziel",
+      semester ~ "Fachsemester",
+      fach_geist ~ "Geisteswissenschaften",
+      fach_sozial ~ "Sozialwissenschaften",
+      fach_wirtschaft ~ "Wirtschaftswissenschaften",
+      fach_inf_mat ~ "Informatik, Mathematik",
+      fach_natur ~ "Naturwissenschaften",
+      fach_ingenieur ~ "Ingenieurswissenschaften",
+      fach_agrar_forst_ernährung ~ "Agrar-, Forst-, Ernährungswissenschaften",
+      fach_sport ~ "Sportswissenschaften",
+      fach_theo_reli ~ "Theologie/ Religionswissenschaften",
+      fach_philo ~ "Philosophie",
+      fach_erz_päd ~ "Erziehungswissenschaften/Pädagogik",
+      fach_sprach ~ "Sprachwissenschaften",
+      fach_med_human_ges ~ "Medizin, Human- und Gesundheitswissenschaften",
+      fach_lehre ~ "Lehramt",
+      fach_kunst_mus_des ~ "Kunst,Musik,Design",
+      fach_recht ~ "Rechtswissenschaften",
+      fach_sonst ~ "Sonstiges",
+      bundesland ~ "Bundesland"
+    ),
+    missing = "no"
+  ) %>%
+  add_overall(col_label = "**Gesamt**") %>%  #Gesamtspalte
+  add_p() %>%  #p-Werte
+  modify_header(label ~ "**Charakteristik**") %>%
+  bold_labels()
+
+Tabelle1
+```
+
+#### Tabelle 1 mit Oberkatgorien
+
+```{r}
+Tabelle1.2 <- pne %>%
+  select(nutzer_status, alter, geschlecht, 
+         abschlussziel,semester, fach_oberkategorie, bundesland,
+         ) %>%
+  tbl_summary(
+    by = nutzer_status,
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{n} ({p}%)"
+    ),
+    label = list(
+      alter ~ "Alter (in Jahren)",
+      geschlecht ~ "Geschlecht",
+      abschlussziel ~ "Abschlussziel",
+      semester ~ "Fachsemester",
+      fach_oberkategorie ~ "Fachrichtung",
+      bundesland ~ "Bundesland"
+    ),
+    missing = "no"
+  ) %>%
+  add_overall(col_label = "**Gesamt**") %>%  #Gesamtspalte
+  add_p() %>%  #p-Werte
+  modify_header(label ~ "**Charakteristik**") %>%
+  bold_labels()
+
+Tabelle1.2
+```
+
+```{r}
+# Als Word/Excel exportieren - unten einfach tags wegmachen
+#library(flextable)
+#table1 %>%
+#  as_flex_table() %>%
+#  save_as_docx(path = "table1.docx")
+```
